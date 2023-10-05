@@ -3,15 +3,12 @@ import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
 
+import { usersObj } from './user-object'
+
 describe('UserController (e2e)', () => {
   let app: INestApplication;
 
-  const users = [
-    { username: 'a' },
-    { username: 'b' },
-    { username: 'c' },
-    { username: null },
-  ];
+
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -26,7 +23,7 @@ describe('UserController (e2e)', () => {
     it('Should return user saved', async () => {
       const user = await request(app.getHttpServer())
         .post('/user')
-        .send(users[0])
+        .send(usersObj[0])
         .expect(201);
 
       await request(app.getHttpServer())
@@ -37,12 +34,12 @@ describe('UserController (e2e)', () => {
     it('Should not return user', async () => {
       const user = await request(app.getHttpServer())
         .post('/user')
-        .send(users[0])
+        .send(usersObj[0])
         .expect(201);
 
       await request(app.getHttpServer())
         .post('/user')
-        .send(users[0])
+        .send(usersObj[0])
         .expect(500);
 
       await request(app.getHttpServer())
@@ -55,7 +52,7 @@ describe('UserController (e2e)', () => {
     it('Should return user by username', async () => {
       const user = await request(app.getHttpServer())
         .post('/user')
-        .send(users[0])
+        .send(usersObj[0])
         .expect(201);
 
       await request(app.getHttpServer())
@@ -69,7 +66,7 @@ describe('UserController (e2e)', () => {
 
     it('Should not return user', async () => {
       await request(app.getHttpServer())
-        .get(`/user/${users[0].username}`)
+        .get(`/user/${usersObj[0].username}`)
         .expect(404);
     });
   });
@@ -78,12 +75,12 @@ describe('UserController (e2e)', () => {
     it('Should edit user', async () => {
       const user = await request(app.getHttpServer())
         .post('/user')
-        .send(users[0])
+        .send(usersObj[0])
         .expect(201);
 
       await request(app.getHttpServer())
         .put(`/user/${user.body.id_user}`)
-        .send(users[1])
+        .send(usersObj[1])
         .expect(200);
 
       await request(app.getHttpServer())
@@ -94,19 +91,19 @@ describe('UserController (e2e)', () => {
     it('Should not edit user', async () => {
       await request(app.getHttpServer())
         .put(`/user/${1}`)
-        .send(users[1])
+        .send(usersObj[1])
         .expect(404);
     });
 
     it('Should not edit user', async () => {
       const user = await request(app.getHttpServer())
         .post('/user')
-        .send(users[0])
+        .send(usersObj[0])
         .expect(201);
 
       await request(app.getHttpServer())
         .put(`/user/${user.body.id_user}`)
-        .send(users[0])
+        .send(usersObj[0])
         .expect(500);
 
       await request(app.getHttpServer())
@@ -119,7 +116,7 @@ describe('UserController (e2e)', () => {
     it('Should delete user', async () => {
       const user = await request(app.getHttpServer())
         .post('/user')
-        .send(users[0])
+        .send(usersObj[0])
         .expect(201);
 
       await request(app.getHttpServer())

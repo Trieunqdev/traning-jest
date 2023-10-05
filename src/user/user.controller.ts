@@ -7,7 +7,7 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
+import { InputUserDto } from './dto/input-user.dto';
 import { UserService } from './user.service';
 
 @Controller('user')
@@ -15,7 +15,7 @@ export class UserController {
   constructor(private userService: UserService) { }
 
   @Post()
-  async save(@Body() createUserDto: CreateUserDto) {
+  async save(@Body() createUserDto: InputUserDto) {
     return this.userService.save(createUserDto);
   }
 
@@ -27,7 +27,7 @@ export class UserController {
   @Put('/:id_user')
   async edit(
     @Param('id_user') id_user: number,
-    @Body() editUserDto: CreateUserDto,
+    @Body() editUserDto: InputUserDto,
   ) {
     return await this.userService.edit(id_user, editUserDto);
   }
